@@ -2,15 +2,22 @@ jobs:
   - name: data-cleaning
     __tracker_experiment_name: Mlflow-tracker
     stages:
-      - name: "clean-housing-data"
+      - name: "clean-base-tables"
         tasks:
-          - name: "housing"
+          - name: "product"
+            params: {}
+          - name: "orders"
+            params: {}
+
+      - name: "clean-derivative-tables"
+        tasks:
+          - name: "sales"
             params: {}
       - name: "train-test-split"
         tasks:
           - name: "train-test"
             params:
-              target: median_house_value
+              target: unit_price
               test_size: 0.2
 
   - name: feat-engg
@@ -23,7 +30,7 @@ jobs:
               outliers:
                 method: mean
                 drop: False
-              sampling_fraction: 1.0
+              sampling_fraction: 0.1
 
   - name: model-gen
     __tracker_experiment_name: Mlflow-tracker
@@ -32,7 +39,7 @@ jobs:
         tasks:
           - name: "train-model"
             params:
-              sampling_fraction: 1.0
+              sampling_fraction: 0.1
 
   - name: model-eval
     __tracker_experiment_name: Mlflow-tracker
